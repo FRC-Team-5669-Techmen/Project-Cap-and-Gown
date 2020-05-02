@@ -8,9 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ManualMecanumDrive;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.MecanumDriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -22,9 +26,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final MecanumDriveSubsystem mecanumDriveSubsystem = new MecanumDriveSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
+  private final Joystick m_joystick = new Joystick(ControllerConstants.JOYSTICK_CONTROLLER_PORT);
 
 
   /**
@@ -33,6 +39,13 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    mecanumDriveSubsystem.setDefaultCommand(
+      //y drives robot right
+      //x drives is front
+      new ManualMecanumDrive(() -> -m_joystick.getRawAxis(1)*0.65, 
+      () -> m_joystick.getRawAxis(0)*0.65, 
+      () -> m_joystick.getRawAxis(4)*0.65, mecanumDriveSubsystem)); 
   }
 
   /**
@@ -42,6 +55,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
   }
 
 
