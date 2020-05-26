@@ -18,6 +18,11 @@ package frc.robot;
 public final class Constants {
     public static final int kFalconFXUnitsPerRevolution = 2048; /* this is constant for Talon FX */
 
+
+    public static final class BlinkinLEDSubsystemConstants {
+        public static final int PWM_PORT = 3;
+    }
+
     public static final class IntakeSubsystemConstants {
         public static final int INTAKE_MOTOR_CAN_ID = 4;
         public static final double MAX_INTAKE_MOTOR_SPEED = 0.5;

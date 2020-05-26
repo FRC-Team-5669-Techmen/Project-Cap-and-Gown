@@ -10,12 +10,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualMecanumDrive;
+import frc.robot.subsystems.BlinkinLEDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.MecanumDriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -27,10 +31,24 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final MecanumDriveSubsystem mecanumDriveSubsystem = new MecanumDriveSubsystem();
+  private final BlinkinLEDSubsystem blinkinLEDSubsystem = new BlinkinLEDSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   private final Joystick m_joystick = new Joystick(ControllerConstants.JOYSTICK_CONTROLLER_PORT);
+
+  private InstantCommand displayBoscoGold = new InstantCommand(blinkinLEDSubsystem::bosco_gold, blinkinLEDSubsystem);
+
+  private InstantCommand displayCSEEBlue = new InstantCommand(blinkinLEDSubsystem::csee_blue, blinkinLEDSubsystem);
+
+  private InstantCommand displayMATYellow = new InstantCommand(blinkinLEDSubsystem::mat_yellow, blinkinLEDSubsystem);
+  
+  private InstantCommand displayMSETRed = new InstantCommand(blinkinLEDSubsystem::mset_red, blinkinLEDSubsystem);
+
+  private InstantCommand displayIDEAGreen = new InstantCommand(blinkinLEDSubsystem::idea_green, blinkinLEDSubsystem);
+
+  private InstantCommand displayACEOrange = new InstantCommand(blinkinLEDSubsystem::ace_orange, blinkinLEDSubsystem);
+
 
 
   /**
@@ -39,6 +57,14 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    Shuffleboard.getTab("Colors").add(displayBoscoGold);
+    Shuffleboard.getTab("Colors").add(displayCSEEBlue);
+    Shuffleboard.getTab("Colors").add(displayMATYellow);
+    Shuffleboard.getTab("Colors").add(displayMSETRed);
+    Shuffleboard.getTab("Colors").add(displayIDEAGreen);
+    Shuffleboard.getTab("Colors").add(displayACEOrange);
+    
 
     mecanumDriveSubsystem.setDefaultCommand(
       //y drives robot right
