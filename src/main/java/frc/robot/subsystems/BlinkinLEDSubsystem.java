@@ -32,7 +32,7 @@ public class BlinkinLEDSubsystem extends SubsystemBase {
    * For, now only putting what we need
    */
 
-    blinkinpwmHashMap.put("Bosco Tech Gold", 0.67);
+    blinkinpwmHashMap.put("Standby", -0.13);//0.67 solid gold
     blinkinpwmHashMap.put("CSEE Blue", 0.87);
     blinkinpwmHashMap.put("MAT Yellow", 0.69);
     blinkinpwmHashMap.put("MSET Red", 0.61);
@@ -52,8 +52,8 @@ public class BlinkinLEDSubsystem extends SubsystemBase {
     blinkin.set(blinkinpwmHashMap.getOrDefault(pattern, blinkinpwmHashMap.get("Bosco Tech Gold")));
   }
 
-  public void bosco_gold(){
-    blinkin.set(blinkinpwmHashMap.get("Bosco Tech Gold"));
+  public void standby_mode(){
+    blinkin.set(blinkinpwmHashMap.get("Standby"));
   }
 
   public void csee_blue(){

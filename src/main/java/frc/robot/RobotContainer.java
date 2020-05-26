@@ -37,7 +37,7 @@ public class RobotContainer {
 
   private final Joystick m_joystick = new Joystick(ControllerConstants.JOYSTICK_CONTROLLER_PORT);
 
-  private InstantCommand displayBoscoGold = new InstantCommand(blinkinLEDSubsystem::bosco_gold, blinkinLEDSubsystem);
+  private InstantCommand displayStandby = new InstantCommand(blinkinLEDSubsystem::standby_mode, blinkinLEDSubsystem);
 
   private InstantCommand displayCSEEBlue = new InstantCommand(blinkinLEDSubsystem::csee_blue, blinkinLEDSubsystem);
 
@@ -58,20 +58,24 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    Shuffleboard.getTab("Colors").add(displayBoscoGold);
-    Shuffleboard.getTab("Colors").add(displayCSEEBlue);
-    Shuffleboard.getTab("Colors").add(displayMATYellow);
-    Shuffleboard.getTab("Colors").add(displayMSETRed);
-    Shuffleboard.getTab("Colors").add(displayIDEAGreen);
-    Shuffleboard.getTab("Colors").add(displayACEOrange);
+    
+    Shuffleboard.getTab("Colors").add("Standby", displayStandby);
+    Shuffleboard.getTab("Colors").add("CSEE Blue", displayCSEEBlue);
+    Shuffleboard.getTab("Colors").add("MAT Yellow", displayMATYellow);
+    Shuffleboard.getTab("Colors").add("MSET Red", displayMSETRed);
+    Shuffleboard.getTab("Colors").add("IDEA Green", displayIDEAGreen);
+    Shuffleboard.getTab("Colors").add("ACE Orange", displayACEOrange);
+    
     
 
+    /*
     mecanumDriveSubsystem.setDefaultCommand(
       //y drives robot right
       //x drives is front
       new ManualMecanumDrive(() -> -m_joystick.getRawAxis(1)*0.65, 
       () -> m_joystick.getRawAxis(0)*0.65, 
       () -> m_joystick.getRawAxis(4)*0.65, mecanumDriveSubsystem)); 
+    */
   }
 
   /**
