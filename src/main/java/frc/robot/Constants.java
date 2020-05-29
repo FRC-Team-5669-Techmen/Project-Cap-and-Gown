@@ -64,7 +64,7 @@ public final class Constants {
         public static final int REAR_RIGHT_MOTOR = 4;
     }
 
-    public static final class AimtTurretAtPowerPortConstants {
+    public static final class RotateTurretConstants {
         public static final double kP = 0.0350;
         public static final double kI = 0.0;
         public static final double kD = 0.0;

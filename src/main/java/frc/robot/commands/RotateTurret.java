@@ -9,28 +9,27 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.Constants.AimtTurretAtPowerPortConstants;
-import frc.robot.Constants.TurretSubsystemConstants;
+import frc.robot.Constants.RotateTurretConstants;
 import frc.robot.subsystems.TurretRotatorSubsystem;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AimTurretAtPowerPort extends PIDCommand {
+public class RotateTurret extends PIDCommand {
 
   private final TurretRotatorSubsystem m_turret;
   //also going to need to add the drivetrain for rotating that too
   /**
    * Creates a new LockOnToPowerPort.
    */
-  public AimTurretAtPowerPort(double desiredAngleDegrees, TurretRotatorSubsystem turret){
+  public RotateTurret(double desiredAngleDegrees, TurretRotatorSubsystem turret){
     super(
         // The controller that the command will use
         //https://docs.wpilib.org/en/latest/docs/software/commandbased/pid-subsystems-commands.html#full-pidcommand-example
-        new PIDController(AimtTurretAtPowerPortConstants.kP, 
-                          AimtTurretAtPowerPortConstants.kI, 
-                          AimtTurretAtPowerPortConstants.kD),  //Need to find these: 
+        new PIDController(RotateTurretConstants.kP, 
+                          RotateTurretConstants.kI, 
+                          RotateTurretConstants.kD),  //Need to find these: 
         // This should return the measurement
         turret::getAngleDegrees, //note limelight limits for x -29.8 to 29.8 degrees
         // This should return the setpoint (can also be a constant)
@@ -46,7 +45,7 @@ public class AimTurretAtPowerPort extends PIDCommand {
     addRequirements(m_turret);
      //https://docs.wpilib.org/en/latest/docs/software/commandbased/pid-subsystems-commands.html#full-pidcommand-example
     getController().enableContinuousInput(-180, 180); // It is an angle controller.
-    getController().setTolerance(AimtTurretAtPowerPortConstants.TOLERANCE);
+    getController().setTolerance(RotateTurretConstants.TOLERANCE);
 
     //getController().setTolerance(positionTolerance);
   }

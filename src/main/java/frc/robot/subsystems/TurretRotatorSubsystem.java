@@ -40,7 +40,7 @@ public class TurretRotatorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Turret Reverse Limit Hit", turretRotatorReverseLimitSwitchHit());
   }
 
-  public void setTurretRotatorMotorSpeed(double speed) {  //ball
+  public void setTurretRotatorMotorSpeed(double speed) {  //TODO rewrite in terms of voltage? Going to need to find experiemetnally
     if (speed >= -rotatorMaxSpeed && speed <= rotatorMaxSpeed)
       turretRotatorMotor.set(speed);
     else if (speed < -rotatorMaxSpeed)
