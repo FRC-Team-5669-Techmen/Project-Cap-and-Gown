@@ -76,6 +76,20 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     setGoal(angleDegrees);
   }
 
+  /**
+   * Intended Use, triggered by toggle
+   */
+  public void moveForward(){
+    setGoal(getAngleFromHorizontalDegrees()+0.25); //add half an angle evey 20 ms cycle (standard loop time) (0.5/0.02 s = 25 degrees/second) (about 2 RPM)
+  }
+
+  /**
+   * Intended Use, triggered by toggle
+   */
+  public void moveBackward(){
+    setGoal(getAngleFromHorizontalDegrees()-0.25); //subtract half a degree evey 20 ms cycle (standard loop time) (0.5/0.02 s = -25 degrees/second) (about -2 RPM)
+  }
+
   
   
 

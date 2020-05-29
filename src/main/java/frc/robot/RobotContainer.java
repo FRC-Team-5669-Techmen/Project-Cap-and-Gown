@@ -15,11 +15,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualMecanumDrive;
+import frc.robot.commands.RotateTurret;
 import frc.robot.subsystems.BlinkinLEDSubsystem;
+import frc.robot.subsystems.DiplomaArmProfiledPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.MecanumDriveSubsystem;
+import frc.robot.subsystems.TurretRotatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -32,10 +36,13 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final MecanumDriveSubsystem mecanumDriveSubsystem = new MecanumDriveSubsystem();
   private final BlinkinLEDSubsystem blinkinLEDSubsystem = new BlinkinLEDSubsystem();
+  private final DiplomaArmProfiledPIDSubsystem profiledPIDDiplomaArm = new DiplomaArmProfiledPIDSubsystem();
+  private final TurretRotatorSubsystem rotatorSubsystem = new TurretRotatorSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   private final Joystick m_joystick = new Joystick(ControllerConstants.JOYSTICK_CONTROLLER_PORT);
+  private final Joystick buttonBox = new Joystick(ControllerConstants.BUTTON_BOX_CONTROLLER_PORT);
 
   private InstantCommand displayStandby = new InstantCommand(blinkinLEDSubsystem::standby_mode, blinkinLEDSubsystem);
 
@@ -65,6 +72,13 @@ public class RobotContainer {
     Shuffleboard.getTab("Colors").add("MSET Red", displayMSETRed);
     Shuffleboard.getTab("Colors").add("IDEA Green", displayIDEAGreen);
     Shuffleboard.getTab("Colors").add("ACE Orange", displayACEOrange);
+
+    new JoystickButton(buttonBox, 6).whenPressed(new InstantCommand(profiledPIDDiplomaArm::moveForward, profiledPIDDiplomaArm)); //SW 1
+    new JoystickButton(buttonBox, 7).whenPressed(new InstantCommand(profiledPIDDiplomaArm::moveBackward, profiledPIDDiplomaArm)); //SW 2
+    new JoystickButton(buttonBox, 8).whenPressed(new RotateTurret(rotatorSubsystem.getAngleDegrees()+0.25, rotatorSubsystem)); //SW 3
+    new JoystickButton(buttonBox, 9).whenPressed(new RotateTurret(rotatorSubsystem.getAngleDegrees()-0.25, rotatorSubsystem)); //SW 4
+
+
     
     
 
