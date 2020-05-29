@@ -16,34 +16,30 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int kFalconFXUnitsPerRevolution = 2048; /* this is constant for Talon FX */
+    public static final class FalconFXConstants {
+        public static final int ENCODER_UNITS_PER_REV = 2048; /* this is constant for Talon FX */
+        public static final double MOTOR_STALL_TORQUE_Nm = 4.69; //N*m
+    }
+
+   
 
 
     public static final class BlinkinLEDSubsystemConstants {
         public static final int PWM_PORT = 3;
     }
 
-    public static final class IntakeSubsystemConstants {
-        public static final int INTAKE_MOTOR_CAN_ID = 4;
-        public static final double MAX_INTAKE_MOTOR_SPEED = 0.5;
-        public static final int SOLENOID_CHANNEL = 4;
-    }
-
-    public static final class MagazineSubsystemConstants {
-        public static final int MAGAZINE_ROTATOR_CAN_ID = 3;
-    }
-    
-    public static final class ControlPanelRotatorSubsystemConstants {
-        public static final int CONTROL_PANEL_SOLENOID_ID = 0;
-        public static final int CONTROL_PANEL_MANIPULATOR_ID = 2;
-    }
-
-    public static final class LiftSubsystemConstants {
-        public static final int SOLENIOD_FORWARD_CHANNEL = 5;
-        public static final int SOLENIOD_REVERSE_CHANNEL = 6;
-    }
-
-    public static final class TankDrivetrainSubsystemConstants {
+    public static final class DiplomaArmSubsystemConstants {
+        public static final int DIPLOMA_ARM_CAN_ID=10;//TODO arbituary need to find out
+        public static final int GEAR_RATIO=0;//TODO find this 
+        public static final double ARM_WEIGHT_N=0.0;
+        public static final double COM_DISTANCE_m=0.0; //COM=Center of Mass
+        public static final int NUMBER_OF_MOTORS=0;
+        public static final double ARM_ANGLE_OFFSET_AT_REST=0.0;//TODO find out
+        public static final double kP = 0.0;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
+        public static final double MAX_VELOCITY= 4.0;
+        public static final double MAX_ACCELERATION= 10.0;
 
     }
 
@@ -70,15 +66,9 @@ public final class Constants {
         public static final int HOOD_DEPLOYER_SOLENOID = 7;
     }
 
-    public static final class LimelightSubsystemConstants {
-        public static final int POWERPORT_VISION_PIPELINE = 3;
-        public static final int LOADING_BAY_VISION_PIPELINE = 1;
-    }
-
     public static final class ControllerConstants {
         public static final int BUTTON_BOX_CONTROLLER_PORT = 0;
         public static final int JOYSTICK_CONTROLLER_PORT = 1;
-
     }
 
     public static final class MecanumDriveConstants {
