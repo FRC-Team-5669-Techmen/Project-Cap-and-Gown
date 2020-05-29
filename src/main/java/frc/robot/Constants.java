@@ -44,26 +44,12 @@ public final class Constants {
     }
 
     public static final class TurretSubsystemConstants {
-        public static final int SHOOTER_MOTOR_CAN_ID = 5;
-        public static final int FOLLOWER_SHOOTER_MOTOR_CAN_ID = 6;
         public static final int TURRET_ROTATOR_MOTOR_CAN_ID = 7;
-        public static final int TURRET_FEEDER_MOTOR_CAN_ID = 1;
-        public static final double SHOOTER_MAX_SPEED = 1.0;
-        public static final double SHOOTER_DEFAULT_SPEED = 1.0;
         public static final double TURRET_ROTATOR_DEFAULT_SPEED = 0.20; //0.22
         public static final double TURRET_ROTATOR_MAX_SPEED = 0.20;//0.22;
-        public static final double kP = -0.1f; //old
         public static final double min_command = 0.05;
-        public static final double TURRET_FEEDER_MOTOR_DEFAULT_SPEED = 1.0;//0.5;//1.0;//0.5;//1.0;
-        public static final String SHOOTER_SPEED_KEY_STRING = "Shooter Speed";
         public static final String ROTATOR_SPEED_KEY_STRING = "Turret Rotator Speed";
-        public static final double SHOOTER_OPERATING_RPM = 6100;
-        public static final double HOOD_MAX_EXTENSION = 30; //TODO figure out
-        public static final double HOOD_MIN_EXTENSION = 3;
-        public static final double HOOD_MAX_SPEED = 1.0;
-        public static final double HOOD_DEFAULT_SPEED = HOOD_MAX_SPEED;
-        public static final double HOOD_MIN_SPEED = 0.6; //must find
-        public static final int HOOD_DEPLOYER_SOLENOID = 7;
+        public static final double GEAR_RATIO = 0.0; //find
     }
 
     public static final class ControllerConstants {
