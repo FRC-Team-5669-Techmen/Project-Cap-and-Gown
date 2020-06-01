@@ -13,8 +13,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.DiplomaArmSubsystemConstants;
+import frc.robot.Constants.MoveDiplomaArmConstants;
+import frc.robot.Constants.RotateTurretConstants;
+import frc.robot.Constants.TurretSubsystemConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualMecanumDrive;
+import frc.robot.commands.MoveDiplomaArm;
 import frc.robot.commands.RotateTurret;
 import frc.robot.subsystems.BlinkinLEDSubsystem;
 import frc.robot.subsystems.DiplomaArmProfiledPIDSubsystem;
@@ -56,6 +61,12 @@ public class RobotContainer {
 
   private InstantCommand displayACEOrange = new InstantCommand(blinkinLEDSubsystem::ace_orange, blinkinLEDSubsystem);
 
+  private Command deliverDiplomaToStudent = new RotateTurret(RotateTurretConstants.STUDENT_POSITION_DEGREES, rotatorSubsystem).
+  alongWith(new MoveDiplomaArm(MoveDiplomaArmConstants.STUDENT_POSITION_DEGREES, profiledPIDDiplomaArm));//fix
+
+  private Command returnArmToPresident = new RotateTurret(RotateTurretConstants.PRESDIENT_POSITION_DEGREES, rotatorSubsystem).
+  alongWith(new MoveDiplomaArm(MoveDiplomaArmConstants.PRESDIENT_POSITION_DEGREES, profiledPIDDiplomaArm));//fix
+
 
 
   /**
@@ -73,23 +84,7 @@ public class RobotContainer {
     Shuffleboard.getTab("Colors").add("IDEA Green", displayIDEAGreen);
     Shuffleboard.getTab("Colors").add("ACE Orange", displayACEOrange);
 
-    new JoystickButton(buttonBox, 6).whenPressed(new InstantCommand(profiledPIDDiplomaArm::moveForward, profiledPIDDiplomaArm)); //SW 1
-    new JoystickButton(buttonBox, 7).whenPressed(new InstantCommand(profiledPIDDiplomaArm::moveBackward, profiledPIDDiplomaArm)); //SW 2
-    new JoystickButton(buttonBox, 8).whenPressed(new RotateTurret(rotatorSubsystem.getAngleDegrees()+0.25, rotatorSubsystem)); //SW 3
-    new JoystickButton(buttonBox, 9).whenPressed(new RotateTurret(rotatorSubsystem.getAngleDegrees()-0.25, rotatorSubsystem)); //SW 4
-
-
     
-    
-
-    /*
-    mecanumDriveSubsystem.setDefaultCommand(
-      //y drives robot right
-      //x drives is front
-      new ManualMecanumDrive(() -> -m_joystick.getRawAxis(1)*0.65, 
-      () -> m_joystick.getRawAxis(0)*0.65, 
-      () -> m_joystick.getRawAxis(4)*0.65, mecanumDriveSubsystem)); 
-    */
   }
 
   /**
@@ -100,6 +95,25 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    /*
+    mecanumDriveSubsystem.setDefaultCommand(
+      //y drives robot right
+      //x drives is front
+      new ManualMecanumDrive(() -> -m_joystick.getRawAxis(1)*0.65, 
+      () -> m_joystick.getRawAxis(0)*0.65, 
+      () -> m_joystick.getRawAxis(4)*0.65, mecanumDriveSubsystem)); 
+    */
+/*
+    new JoystickButton(buttonBox, 2).cancelWhenPressed(deliverDiplomaToStudent); //The button with the e
+    new JoystickButton(buttonBox, 2).cancelWhenPressed(returnArmToPresident);
+  */
+    
+    new JoystickButton(buttonBox, 6).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveForward, profiledPIDDiplomaArm)); //SW 1
+    new JoystickButton(buttonBox, 7).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveBackward, profiledPIDDiplomaArm)); //SW 2
+    new JoystickButton(buttonBox, 8).whileActiveContinuous(new RotateTurret(rotatorSubsystem.getAngleDegrees()+0.25, rotatorSubsystem)); //SW 3
+    new JoystickButton(buttonBox, 9).whileActiveContinuous(new RotateTurret(rotatorSubsystem.getAngleDegrees()-0.25, rotatorSubsystem)); //SW 4
+    new JoystickButton(buttonBox, 10).whenHeld(deliverDiplomaToStudent); //SW 5
+    new JoystickButton(buttonBox, 11).whenHeld(returnArmToPresident); //SW 6
   }
 
 

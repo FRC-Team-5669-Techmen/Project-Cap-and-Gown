@@ -43,6 +43,11 @@ public final class Constants {
 
     }
 
+    public static final class MoveDiplomaArmConstants{
+        public static final double STUDENT_POSITION_DEGREES = 0.0; //TODO Find
+        public static final double PRESDIENT_POSITION_DEGREES = 0.0; //TODO find
+    }
+
     public static final class TurretSubsystemConstants {
         public static final int TURRET_ROTATOR_MOTOR_CAN_ID = 7;
         public static final double TURRET_ROTATOR_DEFAULT_SPEED = 0.20; //0.22
@@ -70,5 +75,8 @@ public final class Constants {
         public static final double kD = 0.0;
         public static final double TARGET_ANGLE = 0.0;
         public static final double TOLERANCE = 2.2; //degrees
+        public static final double STUDENT_POSITION_DEGREES = 0.0; //TODO Find
+        public static final double PRESDIENT_POSITION_DEGREES = 0.0; //TODO find
+        
     }
 }
