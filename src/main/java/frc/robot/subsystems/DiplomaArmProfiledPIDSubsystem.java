@@ -49,6 +49,18 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     return getAngleFromHorizontalDegrees(); //+Angle offset if needed
   }
 
+  public boolean atGoal(){
+    return getController().atGoal();
+  }
+
+  public double getSetpointPosition(){
+    return getController().getSetpoint().position;
+  }
+
+  public int getArmEncoderCounts(){
+    return diplomaArmMotor.getSelectedSensorPosition();
+  }
+
   private double feedForwardVolts(TrapezoidProfile.State setpoint){ //not using help class yet. too complicated
     return DiplomaArmSubsystemConstants.ARM_WEIGHT_N * (DiplomaArmSubsystemConstants.COM_DISTANCE_m)
     /(FalconFXConstants.MOTOR_STALL_TORQUE_Nm) * (DiplomaArmSubsystemConstants.NUMBER_OF_MOTORS) 

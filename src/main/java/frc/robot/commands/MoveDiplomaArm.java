@@ -50,7 +50,7 @@ public class MoveDiplomaArm extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return diplomaArm.getController().atGoal();
+    return diplomaArm.atGoal();
   }
 
   

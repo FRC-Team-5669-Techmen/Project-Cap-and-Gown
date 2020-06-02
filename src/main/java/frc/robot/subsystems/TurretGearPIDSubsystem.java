@@ -11,39 +11,42 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.FalconFXConstants;
 import frc.robot.Constants.TurretGearPIDSubsystemConstants;
 
-public class TurretRotatorSubsystem extends SubsystemBase {
+public class TurretGearPIDSubsystem extends PIDSubsystem {
 
   private static double rotatorMaxSpeed = TurretGearPIDSubsystemConstants.TURRET_ROTATOR_MAX_SPEED;
   
   private final WPI_TalonFX turretRotatorMotor = new WPI_TalonFX(TurretGearPIDSubsystemConstants.TURRET_ROTATOR_MOTOR_CAN_ID);
-  
   /**
-   * Creates a new TurretRotatorSubsystem.
+   * Creates a new ArmRotatorPIDSubsystem. From previous tests, you can usually get away with a P controller
    */
-  public TurretRotatorSubsystem() {
-    configRotatorMotor();
+  public TurretGearPIDSubsystem() {
+    super(
+        // The PIDController used by the subsystem
+        new PIDController(TurretGearPIDSubsystemConstants.kP, 
+        TurretGearPIDSubsystemConstants.kI, TurretGearPIDSubsystemConstants.kD));
 
+    configRotatorMotor();
+    getController().enableContinuousInput(-180, 180); // It is an angle controller.
+    getController().setTolerance(TurretGearPIDSubsystemConstants.TOLERANCE);
   }
 
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    //SmartDashboard.putNumber("Turret Rotator Speed", turretRotatorMotor.get());
-    //SmartDashboard.putNumber("Turret Rotator Encoder Counts", turretRotatorMotor.getSelectedSensorPosition());
-    //SmartDashboard.putNumber("Turret Rotator Angle Degrees", getAngleDegrees());
-    //SmartDashboard.putBoolean("Turret Forward Limit Hit", turretRotatorFwdLimitSwitchHit());
-    //SmartDashboard.putBoolean("Turret Reverse Limit Hit", turretRotatorReverseLimitSwitchHit());
-    
-
+  public void useOutput(double output, double setpoint) {
+    turretRotatorMotor.setVoltage(output);
   }
 
+  @Override
+  public double getMeasurement() {
+    // Return the process variable measurement here
+    return getAngleDegrees();
+  }
+
+  
   public void setTurretRotatorMotorSpeed(double speed) {  //TODO rewrite in terms of voltage? Going to need to find experiemetnally
     if (speed >= -rotatorMaxSpeed && speed <= rotatorMaxSpeed)
       turretRotatorMotor.set(speed);
@@ -51,6 +54,14 @@ public class TurretRotatorSubsystem extends SubsystemBase {
       turretRotatorMotor.set( -rotatorMaxSpeed);
     else if (speed > rotatorMaxSpeed )
       turretRotatorMotor.set( rotatorMaxSpeed);
+  }
+
+  public boolean atSetpoint(){
+    return getController().atSetpoint();
+  }
+
+  public double getSetpoint(){
+    return getController().getSetpoint();
   }
 
   public void stopTurretRotator(){

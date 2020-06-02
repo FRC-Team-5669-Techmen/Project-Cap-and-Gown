@@ -7,63 +7,45 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.Constants.RotateTurretConstants;
-import frc.robot.subsystems.TurretRotatorSubsystem;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.TurretGearPIDSubsystem;
 
-
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class RotateTurret extends PIDCommand {
-
-  private final TurretRotatorSubsystem m_turret;
-  //also going to need to add the drivetrain for rotating that too
+public class RotateTurret extends CommandBase {
+  private final TurretGearPIDSubsystem turretGearPIDSubsystem;
+  private final double angleDegrees;
   /**
-   * Creates a new LockOnToPowerPort.
+   * Creates a new RotateTurret.
    */
-  public RotateTurret(double desiredAngleDegrees, TurretRotatorSubsystem turret){
-    super(
-        // The controller that the command will use
-        //https://docs.wpilib.org/en/latest/docs/software/commandbased/pid-subsystems-commands.html#full-pidcommand-example
-        new PIDController(RotateTurretConstants.kP, 
-                          RotateTurretConstants.kI, 
-                          RotateTurretConstants.kD),  //Need to find these: 
-        // This should return the measurement
-        turret::getAngleDegrees, //note limelight limits for x -29.8 to 29.8 degrees
-        // This should return the setpoint (can also be a constant)
-        () -> desiredAngleDegrees,
-        // This uses the output
-        output -> {
-          // Use the output here
-            turret.setTurretRotatorMotorSpeed(output);
-        });
+  public RotateTurret(double angleDegrees, TurretGearPIDSubsystem turretGearPIDSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    // Configure additional PID options by calling `getController` here.
-    this.m_turret = turret;
-    addRequirements(m_turret);
-     //https://docs.wpilib.org/en/latest/docs/software/commandbased/pid-subsystems-commands.html#full-pidcommand-example
-    getController().enableContinuousInput(-180, 180); // It is an angle controller.
-    getController().setTolerance(RotateTurretConstants.TOLERANCE);
-
-    //getController().setTolerance(positionTolerance);
+    this.turretGearPIDSubsystem = turretGearPIDSubsystem;
+    this.angleDegrees = angleDegrees; 
+    addRequirements(turretGearPIDSubsystem);
+    setName("Rotate Turret");
   }
 
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    super.initialize();
+    turretGearPIDSubsystem.setSetpoint(angleDegrees);
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    //handled by PID controller
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    if(interrupted)
+      turretGearPIDSubsystem.setSetpoint(turretGearPIDSubsystem.getAngleDegrees());//stop at last position
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return getController().atSetpoint(); //if the target gets blocked by say, another robot, stop the command
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    super.end(interrupted);
-    m_turret.setTurretRotatorMotorSpeed(0.0);
+    return turretGearPIDSubsystem.atSetpoint();
   }
 }

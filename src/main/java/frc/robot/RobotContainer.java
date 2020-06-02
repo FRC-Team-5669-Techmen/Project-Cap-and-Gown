@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DiplomaArmSubsystemConstants;
 import frc.robot.Constants.MoveDiplomaArmConstants;
-import frc.robot.Constants.RotateTurretConstants;
-import frc.robot.Constants.TurretSubsystemConstants;
+import frc.robot.Constants.RotateTurretGearConstants;
+import frc.robot.Constants.TurretGearPIDSubsystemConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualMecanumDrive;
 import frc.robot.commands.MoveDiplomaArm;
@@ -25,8 +25,10 @@ import frc.robot.subsystems.BlinkinLEDSubsystem;
 import frc.robot.subsystems.DiplomaArmProfiledPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.MecanumDriveSubsystem;
+import frc.robot.subsystems.TurretGearPIDSubsystem;
 import frc.robot.subsystems.TurretRotatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -42,7 +44,7 @@ public class RobotContainer {
   private final MecanumDriveSubsystem mecanumDriveSubsystem = new MecanumDriveSubsystem();
   private final BlinkinLEDSubsystem blinkinLEDSubsystem = new BlinkinLEDSubsystem();
   private final DiplomaArmProfiledPIDSubsystem profiledPIDDiplomaArm = new DiplomaArmProfiledPIDSubsystem();
-  private final TurretRotatorSubsystem rotatorSubsystem = new TurretRotatorSubsystem();
+  private final TurretGearPIDSubsystem turretGearPIDSubsystem = new TurretGearPIDSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
@@ -61,10 +63,10 @@ public class RobotContainer {
 
   private InstantCommand displayACEOrange = new InstantCommand(blinkinLEDSubsystem::ace_orange, blinkinLEDSubsystem);
 
-  private Command deliverDiplomaToStudent = new RotateTurret(RotateTurretConstants.STUDENT_POSITION_DEGREES, rotatorSubsystem).
+  private Command deliverDiplomaToStudent = new RotateTurret(RotateTurretGearConstants.STUDENT_POSITION_DEGREES, turretGearPIDSubsystem).
   alongWith(new MoveDiplomaArm(MoveDiplomaArmConstants.STUDENT_POSITION_DEGREES, profiledPIDDiplomaArm));//fix
 
-  private Command returnArmToPresident = new RotateTurret(RotateTurretConstants.PRESDIENT_POSITION_DEGREES, rotatorSubsystem).
+  private Command returnArmToPresident = new RotateTurret(RotateTurretGearConstants.PRESDIENT_POSITION_DEGREES, turretGearPIDSubsystem).
   alongWith(new MoveDiplomaArm(MoveDiplomaArmConstants.PRESDIENT_POSITION_DEGREES, profiledPIDDiplomaArm));//fix
 
 
@@ -83,6 +85,21 @@ public class RobotContainer {
     Shuffleboard.getTab("Colors").add("MSET Red", displayMSETRed);
     Shuffleboard.getTab("Colors").add("IDEA Green", displayIDEAGreen);
     Shuffleboard.getTab("Colors").add("ACE Orange", displayACEOrange);
+
+    Shuffleboard.getTab("Gradbot").addNumber("Turret Roator Speed", turretGearPIDSubsystem::getTurretRotatorMotorSpeed);
+    Shuffleboard.getTab("Gradbot").addNumber("Turret Rotator Encoder Counts", turretGearPIDSubsystem::getTurretEncoderCounts);
+    Shuffleboard.getTab("Gradbot").addNumber("Turret Rotator Current Angle Degrees", turretGearPIDSubsystem::getAngleDegrees);
+    Shuffleboard.getTab("Gradbot").addBoolean("Turret Forward Limit Hit", turretGearPIDSubsystem::turretRotatorFwdLimitSwitchHit);
+    Shuffleboard.getTab("Gradbot").addBoolean("Turret Reverse Limit Switch Hit", turretGearPIDSubsystem::turretRotatorReverseLimitSwitchHit);
+    Shuffleboard.getTab("Gradbot").addBoolean("Turret Gear At Setpoint", turretGearPIDSubsystem::atSetpoint);
+    Shuffleboard.getTab("Gradbot").addNumber("Turret Target Angle", turretGearPIDSubsystem::getSetpoint);
+    
+    Shuffleboard.getTab("Gradbot").addBoolean("Arm At Setpoint Position", profiledPIDDiplomaArm::atGoal);
+    Shuffleboard.getTab("Gradbot").addNumber("Arm Target Angle", profiledPIDDiplomaArm::getSetpointPosition);
+    Shuffleboard.getTab("Gradbot").addNumber("Arm Encoder Counts", profiledPIDDiplomaArm::getArmEncoderCounts);
+    Shuffleboard.getTab("Gradbot").addNumber("Arm Current Angle Degrees", profiledPIDDiplomaArm::getAngleFromHorizontalDegrees);
+
+
 
     
   }
@@ -110,8 +127,8 @@ public class RobotContainer {
     
     new JoystickButton(buttonBox, 6).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveForward, profiledPIDDiplomaArm)); //SW 1
     new JoystickButton(buttonBox, 7).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveBackward, profiledPIDDiplomaArm)); //SW 2
-    new JoystickButton(buttonBox, 8).whileActiveContinuous(new RotateTurret(rotatorSubsystem.getAngleDegrees()+0.25, rotatorSubsystem)); //SW 3
-    new JoystickButton(buttonBox, 9).whileActiveContinuous(new RotateTurret(rotatorSubsystem.getAngleDegrees()-0.25, rotatorSubsystem)); //SW 4
+    new JoystickButton(buttonBox, 8).whileActiveContinuous(new RotateTurret(turretGearPIDSubsystem.getAngleDegrees()+0.25, turretGearPIDSubsystem)); //SW 3
+    new JoystickButton(buttonBox, 9).whileActiveContinuous(new RotateTurret(turretGearPIDSubsystem.getAngleDegrees()-0.25, turretGearPIDSubsystem)); //SW 4
     new JoystickButton(buttonBox, 10).whenHeld(deliverDiplomaToStudent); //SW 5
     new JoystickButton(buttonBox, 11).whenHeld(returnArmToPresident); //SW 6
   }
