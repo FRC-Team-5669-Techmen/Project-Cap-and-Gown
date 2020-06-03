@@ -89,8 +89,6 @@ public class RobotContainer {
     Shuffleboard.getTab("Gradbot").addNumber("Turret Roator Speed", turretGearPIDSubsystem::getTurretRotatorMotorSpeed);
     Shuffleboard.getTab("Gradbot").addNumber("Turret Rotator Encoder Counts", turretGearPIDSubsystem::getTurretEncoderCounts);
     Shuffleboard.getTab("Gradbot").addNumber("Turret Rotator Current Angle Degrees", turretGearPIDSubsystem::getAngleDegrees);
-    Shuffleboard.getTab("Gradbot").addBoolean("Turret Forward Limit Hit", turretGearPIDSubsystem::turretRotatorFwdLimitSwitchHit);
-    Shuffleboard.getTab("Gradbot").addBoolean("Turret Reverse Limit Switch Hit", turretGearPIDSubsystem::turretRotatorReverseLimitSwitchHit);
     Shuffleboard.getTab("Gradbot").addBoolean("Turret Gear At Setpoint", turretGearPIDSubsystem::atSetpoint);
     Shuffleboard.getTab("Gradbot").addNumber("Turret Target Angle", turretGearPIDSubsystem::getSetpoint);
     
@@ -112,14 +110,19 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    /*
-    mecanumDriveSubsystem.setDefaultCommand(
-      //y drives robot right
+
+        //y drives robot right
       //x drives is front
+    
+    new JoystickButton(m_joystick, 1).whenHeld(    //this time, we want the drivetraint to be stationary and only move when the tirggger is held
       new ManualMecanumDrive(() -> -m_joystick.getRawAxis(1)*0.65, 
-      () -> m_joystick.getRawAxis(0)*0.65, 
-      () -> m_joystick.getRawAxis(4)*0.65, mecanumDriveSubsystem)); 
-    */
+    () -> m_joystick.getRawAxis(0)*0.65, 
+    () -> m_joystick.getRawAxis(4)*0.65, mecanumDriveSubsystem));
+
+
+  
+    
+    
 /*
     new JoystickButton(buttonBox, 2).cancelWhenPressed(deliverDiplomaToStudent); //The button with the e
     new JoystickButton(buttonBox, 2).cancelWhenPressed(returnArmToPresident);
@@ -127,8 +130,8 @@ public class RobotContainer {
     
     new JoystickButton(buttonBox, 6).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveForward, profiledPIDDiplomaArm)); //SW 1
     new JoystickButton(buttonBox, 7).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveBackward, profiledPIDDiplomaArm)); //SW 2
-    new JoystickButton(buttonBox, 8).whileActiveContinuous(new RotateTurret(turretGearPIDSubsystem.getAngleDegrees()+0.25, turretGearPIDSubsystem)); //SW 3
-    new JoystickButton(buttonBox, 9).whileActiveContinuous(new RotateTurret(turretGearPIDSubsystem.getAngleDegrees()-0.25, turretGearPIDSubsystem)); //SW 4
+    new JoystickButton(buttonBox, 8).whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveForward, turretGearPIDSubsystem)); //SW 3
+    new JoystickButton(buttonBox, 9).whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveBackward, turretGearPIDSubsystem)); //SW 4
     new JoystickButton(buttonBox, 10).whenHeld(deliverDiplomaToStudent); //SW 5
     new JoystickButton(buttonBox, 11).whenHeld(returnArmToPresident); //SW 6
   }

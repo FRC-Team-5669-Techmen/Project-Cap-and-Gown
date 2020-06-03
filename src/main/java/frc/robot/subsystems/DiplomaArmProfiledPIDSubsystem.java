@@ -40,7 +40,7 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   @Override
   public void useOutput(double output, TrapezoidProfile.State setpoint) {
     // Use the output (and optionally the setpoint) here
-    diplomaArmMotor.setVoltage(output+feedForwardVolts(setpoint));
+    //[TODO Uncomment aftertesting anglular accuracy] diplomaArmMotor.setVoltage(output+feedForwardVolts(setpoint)); 
   }
 
   @Override

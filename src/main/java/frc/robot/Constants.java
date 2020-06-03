@@ -30,7 +30,7 @@ public final class Constants {
 
     public static final class DiplomaArmSubsystemConstants {
         public static final int DIPLOMA_ARM_CAN_ID=5;//TODO arbituary need to find out
-        public static final int GEAR_RATIO=0;//TODO find this 
+        public static final double GEAR_RATIO=1/76.5287;//TODO find this
         public static final double ARM_WEIGHT_N=0.0;
         public static final double COM_DISTANCE_m=0.0; //COM=Center of Mass
         public static final int NUMBER_OF_MOTORS=0;
@@ -59,8 +59,8 @@ public final class Constants {
         public static final double TURRET_ROTATOR_MAX_SPEED = 0.20;//0.22;
         public static final double min_command = 0.05;
         public static final String ROTATOR_SPEED_KEY_STRING = "Turret Rotator Speed";
-        public static final double GEAR_RATIO = 0.0; //find
-        public static final double kP = 0.0350;
+        public static final double GEAR_RATIO = 1/109.9989; //1 turret rev /109 motor rev
+        public static final double kP = 0.0;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
         public static final double TOLERANCE = 2.2; //degrees

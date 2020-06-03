@@ -37,7 +37,7 @@ public class TurretGearPIDSubsystem extends PIDSubsystem {
 
   @Override
   public void useOutput(double output, double setpoint) {
-    turretRotatorMotor.setVoltage(output);
+    //[TODO Uncomment aftertesting anglular accuracy] turretRotatorMotor.setVoltage(output);
   }
 
   @Override
@@ -46,7 +46,7 @@ public class TurretGearPIDSubsystem extends PIDSubsystem {
     return getAngleDegrees();
   }
 
-  
+  //@Deprecated No use
   public void setTurretRotatorMotorSpeed(double speed) {  //TODO rewrite in terms of voltage? Going to need to find experiemetnally
     if (speed >= -rotatorMaxSpeed && speed <= rotatorMaxSpeed)
       turretRotatorMotor.set(speed);
@@ -66,6 +66,15 @@ public class TurretGearPIDSubsystem extends PIDSubsystem {
 
   public void stopTurretRotator(){
     turretRotatorMotor.set(0.0);
+  }
+
+  public void moveForward(){
+    setSetpoint(getAngleDegrees()+0.25);
+
+  }
+
+  public void moveBackward(){
+    setSetpoint(getAngleDegrees()-0.25);
   }
 
   public double getTurretRotatorMotorSpeed(){
@@ -97,10 +106,10 @@ public class TurretGearPIDSubsystem extends PIDSubsystem {
     TalonFXConfiguration turretRotatorEncoderConfigs = new TalonFXConfiguration();
     turretRotatorEncoderConfigs.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
     //encoderConfigs.forwardSoftLimitThreshold = 4;
-    turretRotatorEncoderConfigs.reverseSoftLimitThreshold = -86000;
-    turretRotatorEncoderConfigs.reverseSoftLimitEnable = true;
-    turretRotatorEncoderConfigs.forwardSoftLimitThreshold = 19000;
-    turretRotatorEncoderConfigs.forwardSoftLimitEnable = true;
+    //turretRotatorEncoderConfigs.reverseSoftLimitThreshold = -86000;
+    //turretRotatorEncoderConfigs.reverseSoftLimitEnable = true;
+   // turretRotatorEncoderConfigs.forwardSoftLimitThreshold = 19000;
+   // turretRotatorEncoderConfigs.forwardSoftLimitEnable = true;
     turretRotatorMotor.configAllSettings(turretRotatorEncoderConfigs);    
   } 
 
@@ -124,15 +133,15 @@ public class TurretGearPIDSubsystem extends PIDSubsystem {
     rotatorMaxSpeed = TurretGearPIDSubsystemConstants.TURRET_ROTATOR_MAX_SPEED;
 
   }
-
-  public boolean turretRotatorFwdLimitSwitchHit(){
+/*
+  public boolean turretRotatorFwdLimitSwitchHit(){ //Limit swtiches not needed
     return turretRotatorMotor.getSensorCollection().isFwdLimitSwitchClosed() == 1;
   }
 
-  public boolean turretRotatorReverseLimitSwitchHit(){
+  public boolean turretRotatorReverseLimitSwitchHit(){ //Limit swtiches not needed
     return turretRotatorMotor.getSensorCollection().isRevLimitSwitchClosed() == 1;
   }
-
+*/
   public double getAngleRadians(){
     return (double)(turretRotatorMotor.getSelectedSensorPosition()
     / (FalconFXConstants.ENCODER_UNITS_PER_REV)
