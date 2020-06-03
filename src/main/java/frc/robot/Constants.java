@@ -29,7 +29,7 @@ public final class Constants {
     }
 
     public static final class DiplomaArmSubsystemConstants {
-        public static final int DIPLOMA_ARM_CAN_ID=7;//TODO arbituary need to find out
+        public static final int DIPLOMA_ARM_CAN_ID=5;//TODO arbituary need to find out
         public static final int GEAR_RATIO=0;//TODO find this 
         public static final double ARM_WEIGHT_N=0.0;
         public static final double COM_DISTANCE_m=0.0; //COM=Center of Mass
