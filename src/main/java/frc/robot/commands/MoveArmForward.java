@@ -8,55 +8,39 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.Constants.DiplomaArmSubsystemConstants;
 import frc.robot.subsystems.DiplomaArmProfiledPIDSubsystem;
 
-public class MoveDiplomaArm extends CommandBase {
+public class MoveArmForward extends CommandBase {
+  private final DiplomaArmProfiledPIDSubsystem diplomaArmProfiledPIDSubsystem;
   /**
-   * Creates a new MoveArmToStudent. Handles interrupt in movement by stopping arm at last position 
-   * at time the command is interrupted.
+   * Creates a new MoveArmForward.
    */
-
-  private final DiplomaArmProfiledPIDSubsystem diplomaArm;
-  private final double angleDegrees;
-
-  public MoveDiplomaArm(double angleDegrees, DiplomaArmProfiledPIDSubsystem diplomaArm) {
+  public MoveArmForward(DiplomaArmProfiledPIDSubsystem diplomaArmProfiledPIDSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.diplomaArm = diplomaArm;
-    this.angleDegrees = angleDegrees;
-    addRequirements(diplomaArm);
-    setName("Move Diploma Arm to student");
+    this.diplomaArmProfiledPIDSubsystem = diplomaArmProfiledPIDSubsystem;
+    addRequirements(diplomaArmProfiledPIDSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(angleDegrees>= DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES && angleDegrees <= DiplomaArmSubsystemConstants.MAX_ANGLE_Q2_DEGREES)
-      diplomaArm.setGoal(angleDegrees);
-    else
-       new PrintCommand("Out of Movement Range");
+    diplomaArmProfiledPIDSubsystem.disable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //handled by PIDF subsystem controller
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(interrupted)
-      diplomaArm.setGoal(diplomaArm.getAngleFromHorizontalDegrees()); //stop arm at last position
-
+    
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return diplomaArm.atGoal();
+    return false;
   }
-
-  
 }

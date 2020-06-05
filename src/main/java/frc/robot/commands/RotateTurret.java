@@ -27,7 +27,7 @@ public class RotateTurret extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    turretGearPIDSubsystem.setSetpoint(angleDegrees);
+    turretGearPIDSubsystem.setGoal(angleDegrees);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,7 +40,7 @@ public class RotateTurret extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     if(interrupted)
-      turretGearPIDSubsystem.setSetpoint(turretGearPIDSubsystem.getAngleDegrees());//stop at last position
+      turretGearPIDSubsystem.setGoal(turretGearPIDSubsystem.getAngleDegrees());//stop at last position
   }
 
   // Returns true when the command should end.

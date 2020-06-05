@@ -12,11 +12,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.FalconFXConstants;
 import frc.robot.Constants.TurretGearPIDSubsystemConstants;
 
-public class TurretGearPIDSubsystem extends PIDSubsystem {
+public class TurretGearPIDSubsystem extends ProfiledPIDSubsystem {
 
   private static double rotatorMaxSpeed = TurretGearPIDSubsystemConstants.TURRET_ROTATOR_MAX_SPEED;
   
@@ -27,17 +30,20 @@ public class TurretGearPIDSubsystem extends PIDSubsystem {
   public TurretGearPIDSubsystem() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(TurretGearPIDSubsystemConstants.kP, 
-        TurretGearPIDSubsystemConstants.kI, TurretGearPIDSubsystemConstants.kD));
+        new ProfiledPIDController(TurretGearPIDSubsystemConstants.kP, 
+        TurretGearPIDSubsystemConstants.kI, TurretGearPIDSubsystemConstants.kD, 
+        new TrapezoidProfile.Constraints(28, 12)));
 
     configRotatorMotor();
     getController().enableContinuousInput(-180, 180); // It is an angle controller.
     getController().setTolerance(TurretGearPIDSubsystemConstants.TOLERANCE);
+    setGoal(TurretGearPIDSubsystemConstants.TURRET_HOME_ANGLE);
+    enable();
   }
 
   @Override
-  public void useOutput(double output, double setpoint) {
-    //[TODO Uncomment aftertesting anglular accuracy] turretRotatorMotor.setVoltage(output);
+  public void useOutput(double output, TrapezoidProfile.State setpoint) {
+    turretRotatorMotor.setVoltage(output);
   }
 
   @Override
@@ -61,7 +67,7 @@ public class TurretGearPIDSubsystem extends PIDSubsystem {
   }
 
   public double getSetpoint(){
-    return getController().getSetpoint();
+    return getController().getSetpoint().position;
   }
 
   public void stopTurretRotator(){
@@ -69,12 +75,18 @@ public class TurretGearPIDSubsystem extends PIDSubsystem {
   }
 
   public void moveForward(){
-    setSetpoint(getAngleDegrees()+0.25);
+    disable();
+    turretRotatorMotor.setVoltage(1.1);
+    setGoal(getAngleDegrees());
+    enable();
 
   }
 
   public void moveBackward(){
-    setSetpoint(getAngleDegrees()-0.25);
+    disable();
+    turretRotatorMotor.setVoltage(-1.1);
+    setGoal(getAngleDegrees());
+    enable();
   }
 
   public double getTurretRotatorMotorSpeed(){
@@ -90,7 +102,7 @@ public class TurretGearPIDSubsystem extends PIDSubsystem {
 
     enableTurretRotatorSoftLimits();
 
-    turretRotatorMotor.configClearPositionOnLimitF(true, 0);
+    //turretRotatorMotor.configClearPositionOnLimitF(true, 0);
 
     //turretRotatorMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
 
@@ -105,11 +117,10 @@ public class TurretGearPIDSubsystem extends PIDSubsystem {
 
     TalonFXConfiguration turretRotatorEncoderConfigs = new TalonFXConfiguration();
     turretRotatorEncoderConfigs.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
-    //encoderConfigs.forwardSoftLimitThreshold = 4;
-    //turretRotatorEncoderConfigs.reverseSoftLimitThreshold = -86000;
-    //turretRotatorEncoderConfigs.reverseSoftLimitEnable = true;
-   // turretRotatorEncoderConfigs.forwardSoftLimitThreshold = 19000;
-   // turretRotatorEncoderConfigs.forwardSoftLimitEnable = true;
+    turretRotatorEncoderConfigs.reverseSoftLimitThreshold = -65000;
+    turretRotatorEncoderConfigs.reverseSoftLimitEnable = true;
+     turretRotatorEncoderConfigs.forwardSoftLimitThreshold = 65000;
+     turretRotatorEncoderConfigs.forwardSoftLimitEnable = true;
     turretRotatorMotor.configAllSettings(turretRotatorEncoderConfigs);    
   } 
 

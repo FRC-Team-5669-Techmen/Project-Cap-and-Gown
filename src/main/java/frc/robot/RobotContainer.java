@@ -30,6 +30,7 @@ import frc.robot.subsystems.TurretRotatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -63,11 +64,16 @@ public class RobotContainer {
 
   private InstantCommand displayACEOrange = new InstantCommand(blinkinLEDSubsystem::ace_orange, blinkinLEDSubsystem);
 
-  private Command deliverDiplomaToStudent = new RotateTurret(RotateTurretGearConstants.STUDENT_POSITION_DEGREES, turretGearPIDSubsystem).
-  alongWith(new MoveDiplomaArm(MoveDiplomaArmConstants.STUDENT_POSITION_DEGREES, profiledPIDDiplomaArm));//fix
+  private Command deliverDiplomaToStudent = new SequentialCommandGroup(new MoveDiplomaArm(DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES, profiledPIDDiplomaArm),
+  new RotateTurret(RotateTurretGearConstants.STUDENT_POSITION_DEGREES, turretGearPIDSubsystem), 
+  new MoveDiplomaArm(MoveDiplomaArmConstants.STUDENT_POSITION_DEGREES, profiledPIDDiplomaArm));
 
-  private Command returnArmToPresident = new RotateTurret(RotateTurretGearConstants.PRESDIENT_POSITION_DEGREES, turretGearPIDSubsystem).
-  alongWith(new MoveDiplomaArm(MoveDiplomaArmConstants.PRESDIENT_POSITION_DEGREES, profiledPIDDiplomaArm));//fix
+  private Command deliverDiplomaToPresident = new SequentialCommandGroup(new MoveDiplomaArm(DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES, profiledPIDDiplomaArm),
+  new RotateTurret(RotateTurretGearConstants.PRESDIENT_POSITION_DEGREES, turretGearPIDSubsystem), 
+  new MoveDiplomaArm(MoveDiplomaArmConstants.PRESDIENT_POSITION_DEGREES, profiledPIDDiplomaArm));
+  
+
+  
 
 
 
@@ -133,7 +139,11 @@ public class RobotContainer {
     new JoystickButton(buttonBox, 8).whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveForward, turretGearPIDSubsystem)); //SW 3
     new JoystickButton(buttonBox, 9).whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveBackward, turretGearPIDSubsystem)); //SW 4
     new JoystickButton(buttonBox, 10).whenHeld(deliverDiplomaToStudent); //SW 5
-    new JoystickButton(buttonBox, 11).whenHeld(returnArmToPresident); //SW 6
+    new JoystickButton(buttonBox, 11).whenHeld(deliverDiplomaToPresident); //SW 6
+    new JoystickButton(buttonBox, 12).whenPressed(new MoveDiplomaArm(47, profiledPIDDiplomaArm));//TGl 1 Up
+    new JoystickButton(buttonBox, 13).whenPressed(new MoveDiplomaArm(32, profiledPIDDiplomaArm));//TGl 1 Down
+    new JoystickButton(buttonBox, 14).whenPressed(new RotateTurret(85, turretGearPIDSubsystem));//TGl 2 Up
+    new JoystickButton(buttonBox, 15).whenPressed(new RotateTurret(-85, turretGearPIDSubsystem));//TGl 2 Down
   }
 
 
