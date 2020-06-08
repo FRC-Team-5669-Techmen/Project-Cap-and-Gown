@@ -32,13 +32,12 @@ public class TurretGearPIDSubsystem extends ProfiledPIDSubsystem {
         // The PIDController used by the subsystem
         new ProfiledPIDController(TurretGearPIDSubsystemConstants.kP, 
         TurretGearPIDSubsystemConstants.kI, TurretGearPIDSubsystemConstants.kD, 
-        new TrapezoidProfile.Constraints(28, 12)));
+        new TrapezoidProfile.Constraints(40, 26))); //
 
     configRotatorMotor();
     getController().enableContinuousInput(-180, 180); // It is an angle controller.
     getController().setTolerance(TurretGearPIDSubsystemConstants.TOLERANCE);
     setGoal(TurretGearPIDSubsystemConstants.TURRET_HOME_ANGLE);
-    enable();
   }
 
   @Override
@@ -62,8 +61,8 @@ public class TurretGearPIDSubsystem extends ProfiledPIDSubsystem {
       turretRotatorMotor.set( rotatorMaxSpeed);
   }
 
-  public boolean atSetpoint(){
-    return getController().atSetpoint();
+  public boolean atGoal(){
+    return getController().atGoal();
   }
 
   public double getSetpoint(){

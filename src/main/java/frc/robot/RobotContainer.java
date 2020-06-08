@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -55,7 +56,7 @@ public class RobotContainer {
   private InstantCommand displayStandby = new InstantCommand(blinkinLEDSubsystem::standby_mode, blinkinLEDSubsystem);
 
   private InstantCommand displayCSEEBlue = new InstantCommand(blinkinLEDSubsystem::csee_blue, blinkinLEDSubsystem);
-
+    
   private InstantCommand displayMATYellow = new InstantCommand(blinkinLEDSubsystem::mat_yellow, blinkinLEDSubsystem);
   
   private InstantCommand displayMSETRed = new InstantCommand(blinkinLEDSubsystem::mset_red, blinkinLEDSubsystem);
@@ -64,12 +65,17 @@ public class RobotContainer {
 
   private InstantCommand displayACEOrange = new InstantCommand(blinkinLEDSubsystem::ace_orange, blinkinLEDSubsystem);
 
-  private Command deliverDiplomaToStudent = new SequentialCommandGroup(new MoveDiplomaArm(DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES, profiledPIDDiplomaArm),
-  new RotateTurret(RotateTurretGearConstants.STUDENT_POSITION_DEGREES, turretGearPIDSubsystem), 
+  private Command deliverDiplomaToStudent = new SequentialCommandGroup(new MoveDiplomaArm(47.00, profiledPIDDiplomaArm),
+  new WaitCommand(10),
+  new RotateTurret(RotateTurretGearConstants.STUDENT_POSITION_DEGREES, turretGearPIDSubsystem),
+  new WaitCommand(10), 
   new MoveDiplomaArm(MoveDiplomaArmConstants.STUDENT_POSITION_DEGREES, profiledPIDDiplomaArm));
 
-  private Command deliverDiplomaToPresident = new SequentialCommandGroup(new MoveDiplomaArm(DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES, profiledPIDDiplomaArm),
+  private Command deliverDiplomaToPresident = new SequentialCommandGroup(new MoveDiplomaArm(47.00, profiledPIDDiplomaArm), //DANGEROUS library bug. Don't bother unless you know what you are doing https://www.chiefdelphi.com/t/commandgroup-wont-run-sequentially/163147
+
+  new WaitCommand(10),
   new RotateTurret(RotateTurretGearConstants.PRESDIENT_POSITION_DEGREES, turretGearPIDSubsystem), 
+  new WaitCommand(10),
   new MoveDiplomaArm(MoveDiplomaArmConstants.PRESDIENT_POSITION_DEGREES, profiledPIDDiplomaArm));
   
 
@@ -95,17 +101,29 @@ public class RobotContainer {
     Shuffleboard.getTab("Gradbot").addNumber("Turret Roator Speed", turretGearPIDSubsystem::getTurretRotatorMotorSpeed);
     Shuffleboard.getTab("Gradbot").addNumber("Turret Rotator Encoder Counts", turretGearPIDSubsystem::getTurretEncoderCounts);
     Shuffleboard.getTab("Gradbot").addNumber("Turret Rotator Current Angle Degrees", turretGearPIDSubsystem::getAngleDegrees);
-    Shuffleboard.getTab("Gradbot").addBoolean("Turret Gear At Setpoint", turretGearPIDSubsystem::atSetpoint);
+    Shuffleboard.getTab("Gradbot").addBoolean("Turret Gear At Setpoint", turretGearPIDSubsystem::atGoal);
     Shuffleboard.getTab("Gradbot").addNumber("Turret Target Angle", turretGearPIDSubsystem::getSetpoint);
     
     Shuffleboard.getTab("Gradbot").addBoolean("Arm At Setpoint Position", profiledPIDDiplomaArm::atGoal);
     Shuffleboard.getTab("Gradbot").addNumber("Arm Target Angle", profiledPIDDiplomaArm::getSetpointPosition);
     Shuffleboard.getTab("Gradbot").addNumber("Arm Encoder Counts", profiledPIDDiplomaArm::getArmEncoderCounts);
     Shuffleboard.getTab("Gradbot").addNumber("Arm Current Angle Degrees", profiledPIDDiplomaArm::getAngleFromHorizontalDegrees);
+    
+    SmartDashboard.putData(turretGearPIDSubsystem);
+    SmartDashboard.putData(profiledPIDDiplomaArm);
 
 
 
     
+  }
+
+  /**
+   * Code you want to run teleop is enabled
+   */
+  public void teleopInitRobot(){
+    profiledPIDDiplomaArm.setGoal(0.0);
+    profiledPIDDiplomaArm.setGoal(DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES);
+    turretGearPIDSubsystem.setGoal(0.0);
   }
 
   /**
@@ -134,16 +152,16 @@ public class RobotContainer {
     new JoystickButton(buttonBox, 2).cancelWhenPressed(returnArmToPresident);
   */
     
-    new JoystickButton(buttonBox, 6).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveForward, profiledPIDDiplomaArm)); //SW 1
-    new JoystickButton(buttonBox, 7).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveBackward, profiledPIDDiplomaArm)); //SW 2
-    new JoystickButton(buttonBox, 8).whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveForward, turretGearPIDSubsystem)); //SW 3
-    new JoystickButton(buttonBox, 9).whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveBackward, turretGearPIDSubsystem)); //SW 4
-    new JoystickButton(buttonBox, 10).whenHeld(deliverDiplomaToStudent); //SW 5
-    new JoystickButton(buttonBox, 11).whenHeld(deliverDiplomaToPresident); //SW 6
-    new JoystickButton(buttonBox, 12).whenPressed(new MoveDiplomaArm(47, profiledPIDDiplomaArm));//TGl 1 Up
-    new JoystickButton(buttonBox, 13).whenPressed(new MoveDiplomaArm(32, profiledPIDDiplomaArm));//TGl 1 Down
-    new JoystickButton(buttonBox, 14).whenPressed(new RotateTurret(85, turretGearPIDSubsystem));//TGl 2 Up
-    new JoystickButton(buttonBox, 15).whenPressed(new RotateTurret(-85, turretGearPIDSubsystem));//TGl 2 Down
+   new JoystickButton(buttonBox, 6).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveForward, profiledPIDDiplomaArm)); //SW 1
+   new JoystickButton(buttonBox, 7).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveBackward, profiledPIDDiplomaArm)); //SW 2
+   new JoystickButton(buttonBox, 8).whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveForward, turretGearPIDSubsystem)); //SW 3
+   new JoystickButton(buttonBox, 9).whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveBackward, turretGearPIDSubsystem)); //SW 4
+  //new JoystickButton(buttonBox, 10).whenPressed(dt);
+  // new JoystickButton(buttonBox, 11).whenPressed(deliverDiplomaToStudent); DANGEROUS library bug. in
+   new JoystickButton(buttonBox, 12).whenPressed(new MoveDiplomaArm(47, profiledPIDDiplomaArm));//TGl 1 Up
+   new JoystickButton(buttonBox, 13).whenPressed(new MoveDiplomaArm(32, profiledPIDDiplomaArm));//TGl 1 Down
+   new JoystickButton(buttonBox, 14).whenPressed(new RotateTurret(85, turretGearPIDSubsystem));//TGl 2 Up
+   new JoystickButton(buttonBox, 15).whenPressed(new RotateTurret(-85, turretGearPIDSubsystem));//TGl 2 Down
   }
 
 

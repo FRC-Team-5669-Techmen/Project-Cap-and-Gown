@@ -41,10 +41,11 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     // TODO find out offset
     // setGoal(DiplomaArmSubsystemConstants.ARM_ANGLE_OFFSET_AT_REST);//move to
     // starting angle
-    setGoal(DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES);
-    enable();//not sure why I have to do this.
+    setGoal(32.00);
     
   }
+
+  
 
   @Override
   public void useOutput(double output, TrapezoidProfile.State setpoint) {
@@ -125,9 +126,10 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
    * Trigger with toggle. Voltage will not be set permanenty. Must repativiely call this method
    */
   public void moveForward() {
-    if(getAngleFromHorizontalDegrees()<=DiplomaArmSubsystemConstants.MAX_ANGLE_Q2_DEGREES-1)
+    if(getAngleFromHorizontalDegrees()<=51 && getAngleFromHorizontalDegrees()>=32)
     {
       disable();//allow the user to move the arm by tuning off pid correction
+      /*
       if (getAngleFromHorizontalDegrees()>74 && getAngleFromHorizontalDegrees()<90)
         diplomaArmMotor.setVoltage(1.7); //cosine too weak in this region
       else if (getAngleFromHorizontalDegrees()>DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES && getAngleFromHorizontalDegrees()<DiplomaArmSubsystemConstants.MIN_ANGLE_Q2_DEGREES)
@@ -135,7 +137,9 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
       else if (getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MAX_ANGLE_Q2_DEGREES)
         diplomaArmMotor.setVoltage(0.60+feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));  //0.30
       else 
-        diplomaArmMotor.setVoltage(1.5*feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));
+      */
+      diplomaArmMotor.setVoltage(1.5*feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));
+      
       setGoal(getAngleFromHorizontalDegrees());
       enable();//turn the control back on
     }
@@ -148,15 +152,20 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
    * Trigger with toggle. Voltage will not be set permanenty. Must repativiely call this method
    */
   public void moveBackward() {
-    if(getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES+1)
+    if(getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES && getAngleFromHorizontalDegrees()<=DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES)
     {
       disable();//allow the user to move the arm by tuning off pid correction
+      /**
       if (getAngleFromHorizontalDegrees()<DiplomaArmSubsystemConstants.MIN_ANGLE_Q2_DEGREES && getAngleFromHorizontalDegrees()>DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES)
         diplomaArmMotor.setVoltage(-1.8*Math.abs(Math.cos(getAngleFromHorizontalRadians()))+feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));
-      else if (getAngleFromHorizontalDegrees()<=DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES)
-        diplomaArmMotor.setVoltage(-0.60+feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));  //0.30
+        */
+
+     diplomaArmMotor.setVoltage(-0.60+feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));  //0.30
+
+      /*
       else 
         diplomaArmMotor.setVoltage(1.5*feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));
+        */
       setGoal(getAngleFromHorizontalDegrees());
       enable();//turn the control back on
     }

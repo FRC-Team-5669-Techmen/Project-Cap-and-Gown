@@ -35,11 +35,11 @@ public final class Constants {
         public static final double COM_DISTANCE_m=0.0; //COM=Center of Mass
         public static final int NUMBER_OF_MOTORS=0;
         public static final double ARM_ANGLE_OFFSET_AT_REST=0.0;//TODO find out
-        public static final double kP = 0.065;
+        public static final double kP = 0.095; //0.65
         public static final double kI = 0.0;
         public static final double kD = 0.0000;
-        public static final double MAX_VELOCITY= 25.0;
-        public static final double MAX_ACCELERATION= 10.0;
+        public static final double MAX_VELOCITY= 20.0;
+        public static final double MAX_ACCELERATION= 15.0;
         public static final double GRAVITY_FEED_FORWARD_VOLTAGE = 1.15;//This is the voltage needed to keep the arm static (not moving) at 0 degrees
         public static final double MAX_ANGLE_Q1_DEGREES = 51;
         public static final double MIN_ANGLE_Q1_DEGREES = 32;
@@ -69,8 +69,8 @@ public final class Constants {
         public static final double min_command = 0.05;
         public static final String ROTATOR_SPEED_KEY_STRING = "Turret Rotator Speed";
         public static final double GEAR_RATIO = 1/109.9989; //1 turret rev /109 motor rev
-        public static final double kP = 0.048;
-        public static final double kI = 0.006;
+        public static final double kP = 0.255; //0.225
+        public static final double kI = 0.0;//0.006;
         public static final double kD = 0.0;
         public static final double TOLERANCE = 2.2; //degrees
 

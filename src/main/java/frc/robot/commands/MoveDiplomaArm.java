@@ -32,10 +32,14 @@ public class MoveDiplomaArm extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(angleDegrees>= DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES && angleDegrees <= DiplomaArmSubsystemConstants.MAX_ANGLE_Q2_DEGREES)
+    if((double)angleDegrees>= DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES && angleDegrees <= DiplomaArmSubsystemConstants.MAX_ANGLE_Q2_DEGREES)
+    {
       diplomaArm.setGoal(angleDegrees);
-    else
-       new PrintCommand("Out of Movement Range");
+      diplomaArm.enable();
+    }
+    
+   // else
+       //new PrintCommand("Out of Movement Range");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,8 +51,11 @@ public class MoveDiplomaArm extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+
+    /*
     if(interrupted)
       diplomaArm.setGoal(diplomaArm.getAngleFromHorizontalDegrees()); //stop arm at last position
+    */
 
   }
 
