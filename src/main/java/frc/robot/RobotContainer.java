@@ -157,9 +157,9 @@ public class RobotContainer {
       //x drives is front
     
     new JoystickButton(m_joystick, 1).whenHeld(    //this time, we want the drivetraint to be stationary and only move when the tirggger is held
-      new ManualMecanumDrive(() -> -m_joystick.getRawAxis(1)*0.65, 
-    () -> m_joystick.getRawAxis(0)*0.65, 
-    () -> m_joystick.getRawAxis(4)*0.65, mecanumDriveSubsystem));
+      new ManualMecanumDrive(() -> -m_joystick.getRawAxis(1)*0.22, 
+    () -> m_joystick.getRawAxis(0)*0.22, 
+    () -> m_joystick.getRawAxis(4)*0.22, mecanumDriveSubsystem));
 
 
   

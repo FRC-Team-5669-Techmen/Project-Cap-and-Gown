@@ -37,7 +37,7 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
                 DiplomaArmSubsystemConstants.MAX_ACCELERATION)));
     configDiplomaArmMotor();
     getController().enableContinuousInput(-180, 180);
-    getController().setTolerance(3);
+    getController().setTolerance(3.0);
     // TODO find out offset
     // setGoal(DiplomaArmSubsystemConstants.ARM_ANGLE_OFFSET_AT_REST);//move to
     // starting angle
@@ -152,7 +152,7 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
    * Trigger with toggle. Voltage will not be set permanenty. Must repativiely call this method
    */
   public void moveBackward() {
-    if(getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES && getAngleFromHorizontalDegrees()<=DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES)
+    if(getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES+2 && getAngleFromHorizontalDegrees()<=DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES)
     {
       disable();//allow the user to move the arm by tuning off pid correction
       /**

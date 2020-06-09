@@ -35,7 +35,7 @@ public final class Constants {
         public static final double COM_DISTANCE_m=0.0; //COM=Center of Mass
         public static final int NUMBER_OF_MOTORS=0;
         public static final double ARM_ANGLE_OFFSET_AT_REST=0.0;//TODO find out
-        public static final double kP = 0.095; //0.65
+        public static final double kP = 0.10;
         public static final double kI = 0.0;
         public static final double kD = 0.0000;
         public static final double MAX_VELOCITY= 20.0;
