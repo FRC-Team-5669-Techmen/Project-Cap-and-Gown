@@ -78,6 +78,18 @@ public class RobotContainer {
   new WaitCommand(10),
   new MoveDiplomaArm(MoveDiplomaArmConstants.PRESDIENT_POSITION_DEGREES, profiledPIDDiplomaArm));
   
+  private final JoystickButton buttonBoxSW1 = new JoystickButton(buttonBox, 6);
+  private final JoystickButton buttonBoxSW2 = new JoystickButton(buttonBox, 7);
+  private final JoystickButton buttonBoxSW3 = new JoystickButton(buttonBox, 8);
+  private final JoystickButton buttonBoxSW4 = new JoystickButton(buttonBox, 9);
+  private final JoystickButton buttonBoxTGL1Up = new JoystickButton(buttonBox, 12);
+  private final JoystickButton buttonBoxTGL1Down = new JoystickButton(buttonBox, 13);
+  private final JoystickButton buttonBoxTGL2Up = new JoystickButton(buttonBox, 14);
+  private final JoystickButton buttonBoxTGL2Down = new JoystickButton(buttonBox, 15);
+
+
+
+  
 
   
 
@@ -121,8 +133,7 @@ public class RobotContainer {
    * Code you want to run teleop is enabled
    */
   public void teleopInitRobot(){
-    profiledPIDDiplomaArm.setGoal(0.0);
-    profiledPIDDiplomaArm.setGoal(DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES);
+    profiledPIDDiplomaArm.enable();
     turretGearPIDSubsystem.setGoal(0.0);
   }
 
@@ -151,17 +162,29 @@ public class RobotContainer {
     new JoystickButton(buttonBox, 2).cancelWhenPressed(deliverDiplomaToStudent); //The button with the e
     new JoystickButton(buttonBox, 2).cancelWhenPressed(returnArmToPresident);
   */
-    
+    /*
    new JoystickButton(buttonBox, 6).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveForward, profiledPIDDiplomaArm)); //SW 1
    new JoystickButton(buttonBox, 7).whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveBackward, profiledPIDDiplomaArm)); //SW 2
    new JoystickButton(buttonBox, 8).whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveForward, turretGearPIDSubsystem)); //SW 3
    new JoystickButton(buttonBox, 9).whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveBackward, turretGearPIDSubsystem)); //SW 4
   //new JoystickButton(buttonBox, 10).whenPressed(dt);
   // new JoystickButton(buttonBox, 11).whenPressed(deliverDiplomaToStudent); DANGEROUS library bug. in
-   new JoystickButton(buttonBox, 12).whenPressed(new MoveDiplomaArm(47, profiledPIDDiplomaArm));//TGl 1 Up
-   new JoystickButton(buttonBox, 13).whenPressed(new MoveDiplomaArm(32, profiledPIDDiplomaArm));//TGl 1 Down
-   new JoystickButton(buttonBox, 14).whenPressed(new RotateTurret(85, turretGearPIDSubsystem));//TGl 2 Up
-   new JoystickButton(buttonBox, 15).whenPressed(new RotateTurret(-85, turretGearPIDSubsystem));//TGl 2 Down
+   new JoystickButton(buttonBox, 12).whenHeld(new MoveDiplomaArm(47, profiledPIDDiplomaArm));//TGl 1 Up
+   new JoystickButton(buttonBox, 13).whenHeld(new MoveDiplomaArm(32, profiledPIDDiplomaArm));//TGl 1 Down
+   new JoystickButton(buttonBox, 14).whenHeld(new RotateTurret(85, turretGearPIDSubsystem));//TGl 2 Up
+   new JoystickButton(buttonBox, 15).whenHeld(new RotateTurret(-85, turretGearPIDSubsystem));//TGl 2 Down
+*/
+   buttonBoxSW1.whenHeld(new RotateTurret(-85, turretGearPIDSubsystem));
+   buttonBoxSW2.whenHeld(new RotateTurret(85, turretGearPIDSubsystem));
+   buttonBoxSW3.whenHeld(new MoveDiplomaArm(47, profiledPIDDiplomaArm));
+   buttonBoxSW4.whenHeld(new MoveDiplomaArm(32, profiledPIDDiplomaArm));
+   buttonBoxTGL1Up.whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveForward, turretGearPIDSubsystem));
+   buttonBoxTGL1Down.whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveBackward, turretGearPIDSubsystem));
+   buttonBoxTGL2Up.whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveForward, profiledPIDDiplomaArm));
+   buttonBoxTGL2Down.whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveBackward, profiledPIDDiplomaArm));
+
+
+  
   }
 
 
