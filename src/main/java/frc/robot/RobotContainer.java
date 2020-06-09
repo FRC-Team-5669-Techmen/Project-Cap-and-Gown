@@ -133,7 +133,14 @@ public class RobotContainer {
    * Code you want to run teleop is enabled
    */
   public void teleopInitRobot(){
+    profiledPIDDiplomaArm.setGoal(DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES);
     profiledPIDDiplomaArm.enable();
+  }
+
+  public void disabledInitRobot(){
+    profiledPIDDiplomaArm.disable();
+    turretGearPIDSubsystem.disable();
+    profiledPIDDiplomaArm.setGoal(0.0);
     turretGearPIDSubsystem.setGoal(0.0);
   }
 
@@ -174,10 +181,10 @@ public class RobotContainer {
    new JoystickButton(buttonBox, 14).whenHeld(new RotateTurret(85, turretGearPIDSubsystem));//TGl 2 Up
    new JoystickButton(buttonBox, 15).whenHeld(new RotateTurret(-85, turretGearPIDSubsystem));//TGl 2 Down
 */
-   buttonBoxSW1.whenHeld(new RotateTurret(-85, turretGearPIDSubsystem));
-   buttonBoxSW2.whenHeld(new RotateTurret(85, turretGearPIDSubsystem));
-   buttonBoxSW3.whenHeld(new MoveDiplomaArm(47, profiledPIDDiplomaArm));
-   buttonBoxSW4.whenHeld(new MoveDiplomaArm(32, profiledPIDDiplomaArm));
+   buttonBoxSW1.whenPressed(new RotateTurret(-85, turretGearPIDSubsystem));
+   buttonBoxSW2.whenPressed(new RotateTurret(85, turretGearPIDSubsystem));
+   buttonBoxSW3.whenPressed(new MoveDiplomaArm(47, profiledPIDDiplomaArm));
+   buttonBoxSW4.whenPressed(new MoveDiplomaArm(32, profiledPIDDiplomaArm));
    buttonBoxTGL1Up.whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveForward, turretGearPIDSubsystem));
    buttonBoxTGL1Down.whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveBackward, turretGearPIDSubsystem));
    buttonBoxTGL2Up.whileActiveContinuous(new InstantCommand(profiledPIDDiplomaArm::moveForward, profiledPIDDiplomaArm));
