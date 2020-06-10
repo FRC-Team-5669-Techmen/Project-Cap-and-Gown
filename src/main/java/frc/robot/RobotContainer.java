@@ -161,6 +161,7 @@ public class RobotContainer {
     () -> m_joystick.getRawAxis(0)*0.22, 
     () -> m_joystick.getRawAxis(4)*0.22, mecanumDriveSubsystem));
 
+    displayStandby.setName("Display Standby");
 
   
     
@@ -183,7 +184,7 @@ public class RobotContainer {
 */
    buttonBoxSW1.whenPressed(new RotateTurret(-85, turretGearPIDSubsystem));
    buttonBoxSW2.whenPressed(new RotateTurret(85, turretGearPIDSubsystem));
-   buttonBoxSW3.whenPressed(new MoveDiplomaArm(47, profiledPIDDiplomaArm));
+   buttonBoxSW3.whenPressed(new MoveDiplomaArm(96, profiledPIDDiplomaArm));//47
    buttonBoxSW4.whenPressed(new MoveDiplomaArm(32, profiledPIDDiplomaArm));
    buttonBoxTGL1Up.whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveForward, turretGearPIDSubsystem));
    buttonBoxTGL1Down.whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveBackward, turretGearPIDSubsystem));

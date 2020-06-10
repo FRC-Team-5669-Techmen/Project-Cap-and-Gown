@@ -46,11 +46,18 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   }
 
   
-
+ //TODO Maybe put conditional statements into feedforward?
   @Override
   public void useOutput(double output, TrapezoidProfile.State setpoint) {
     // Use the output (and optionally the setpoint) here
-    diplomaArmMotor.setVoltage(output + feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0))/*feedForwardVolts(setpoint)*/);
+    if(getAngleFromHorizontalDegrees()>=85.00 && getAngleFromHorizontalDegrees()<=95.00)
+        diplomaArmMotor.setVoltage(output + 2.00*feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0))/*feedForwardVolts(setpoint)*/);
+
+    else if(getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES && getAngleFromHorizontalDegrees()<=DiplomaArmSubsystemConstants.MIN_ANGLE_Q2_DEGREES)
+        diplomaArmMotor.setVoltage(output + 1.75*feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0))/*feedForwardVolts(setpoint)*/);
+    
+    else
+      diplomaArmMotor.setVoltage(output + feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0))/*feedForwardVolts(setpoint)*/);
   }
 
   @Override
@@ -152,7 +159,7 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
    * Trigger with toggle. Voltage will not be set permanenty. Must repativiely call this method
    */
   public void moveBackward() {
-    if(getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES+2 && getAngleFromHorizontalDegrees()<=DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES)
+    if(getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES+2 && getAngleFromHorizontalDegrees()<=90)
     {
       disable();//allow the user to move the arm by tuning off pid correction
       /**
