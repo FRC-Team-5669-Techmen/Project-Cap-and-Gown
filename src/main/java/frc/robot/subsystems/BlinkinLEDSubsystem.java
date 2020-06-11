@@ -32,12 +32,12 @@ public class BlinkinLEDSubsystem extends SubsystemBase {
    * For, now only putting what we need
    */
 
-    blinkinpwmHashMap.put("Standby", -0.13);//0.67 solid gold
-    blinkinpwmHashMap.put("CSEE Blue", 0.87);
-    blinkinpwmHashMap.put("MAT Yellow", 0.69);
-    blinkinpwmHashMap.put("MSET Red", 0.61);
-    blinkinpwmHashMap.put("IDEA Green", 0.77);
-    blinkinpwmHashMap.put("ACE Orange", 0.65);
+//    blinkinpwmHashMap.put("Standby", -0.13);//0.67 solid gold
+  //  blinkinpwmHashMap.put("CSEE Blue", 0.87);
+    //blinkinpwmHashMap.put("MAT Yellow", 0.69);
+   // blinkinpwmHashMap.put("MSET Red", 0.61);
+   // blinkinpwmHashMap.put("IDEA Green", 0.77);
+   // blinkinpwmHashMap.put("ACE Orange", 0.65);
   
 
   }
@@ -53,27 +53,35 @@ public class BlinkinLEDSubsystem extends SubsystemBase {
   }
 
   public void standby_mode(){
-    blinkin.set(blinkinpwmHashMap.get("Standby"));
+    blinkin.set(-0.13);
   }
 
   public void csee_blue(){
-    blinkin.set(blinkinpwmHashMap.get("CSEE Blue"));
+    blinkin.set(0.87);
   }
 
   public void mat_yellow(){
-    blinkin.set(blinkinpwmHashMap.get("MAT Yellow"));
+    blinkin.set(0.69);
   }
 
   public void mset_red(){
-    blinkin.set(blinkinpwmHashMap.get("MSET Red"));
+    blinkin.set(0.61);
   }
 
   public void idea_green(){
-    blinkin.set(blinkinpwmHashMap.get("IDEA Green"));
+    blinkin.set(0.77);
   }
 
   public void ace_orange(){
-    blinkin.set(blinkinpwmHashMap.get("ACE Orange"));
+    blinkin.set(0.65);
+  }
+
+  public void white(){
+    blinkin.set(0.93);
+  }
+
+  public void off(){
+    blinkin.set(0.99);
   }
 
   //too much time to implement with a hahsmap

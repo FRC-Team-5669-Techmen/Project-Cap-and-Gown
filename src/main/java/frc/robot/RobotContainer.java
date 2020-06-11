@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -65,6 +66,11 @@ public class RobotContainer {
 
   private InstantCommand displayACEOrange = new InstantCommand(blinkinLEDSubsystem::ace_orange, blinkinLEDSubsystem);
 
+  private InstantCommand displayOff = new InstantCommand(blinkinLEDSubsystem::off, blinkinLEDSubsystem);
+
+  
+  private InstantCommand displayWhite = new InstantCommand(blinkinLEDSubsystem::white, blinkinLEDSubsystem);
+
   private Command deliverDiplomaToStudent = new SequentialCommandGroup(new MoveDiplomaArm(47.00, profiledPIDDiplomaArm),
   new WaitCommand(10),
   new RotateTurret(RotateTurretGearConstants.STUDENT_POSITION_DEGREES, turretGearPIDSubsystem),
@@ -87,6 +93,7 @@ public class RobotContainer {
   private final JoystickButton buttonBoxTGL2Up = new JoystickButton(buttonBox, 14);
   private final JoystickButton buttonBoxTGL2Down = new JoystickButton(buttonBox, 15);
 
+  PowerDistributionPanel examplePDP = new PowerDistributionPanel(0);//need to monitor that pdp
 
 
   
@@ -109,6 +116,8 @@ public class RobotContainer {
     Shuffleboard.getTab("Colors").add("MSET Red", displayMSETRed);
     Shuffleboard.getTab("Colors").add("IDEA Green", displayIDEAGreen);
     Shuffleboard.getTab("Colors").add("ACE Orange", displayACEOrange);
+    Shuffleboard.getTab("Colors").add("White", displayWhite);
+    Shuffleboard.getTab("Colors").add("Off", displayOff);
 
     Shuffleboard.getTab("Gradbot").addNumber("Turret Roator Speed", turretGearPIDSubsystem::getTurretRotatorMotorSpeed);
     Shuffleboard.getTab("Gradbot").addNumber("Turret Rotator Encoder Counts", turretGearPIDSubsystem::getTurretEncoderCounts);
@@ -161,7 +170,7 @@ public class RobotContainer {
     () -> m_joystick.getRawAxis(0)*0.22, 
     () -> m_joystick.getRawAxis(4)*0.22, mecanumDriveSubsystem));
 
-    displayStandby.setName("Display Standby");
+   // displayStandby.setName("Display Standby");
 
   
     
@@ -183,7 +192,7 @@ public class RobotContainer {
    new JoystickButton(buttonBox, 15).whenHeld(new RotateTurret(-85, turretGearPIDSubsystem));//TGl 2 Down
 */
    buttonBoxSW1.whenPressed(new RotateTurret(-85, turretGearPIDSubsystem));
-   buttonBoxSW2.whenPressed(new RotateTurret(85, turretGearPIDSubsystem));
+   buttonBoxSW2.whenPressed(new RotateTurret(42, turretGearPIDSubsystem));//85
    buttonBoxSW3.whenPressed(new MoveDiplomaArm(96, profiledPIDDiplomaArm));//47
    buttonBoxSW4.whenPressed(new MoveDiplomaArm(32, profiledPIDDiplomaArm));
    buttonBoxTGL1Up.whileActiveContinuous(new InstantCommand(turretGearPIDSubsystem::moveForward, turretGearPIDSubsystem));

@@ -25,7 +25,7 @@ public final class Constants {
 
 
     public static final class BlinkinLEDSubsystemConstants {
-        public static final int PWM_PORT = 3;
+        public static final int PWM_PORT = 4;
     }
 
     public static final class DiplomaArmSubsystemConstants {
@@ -38,7 +38,7 @@ public final class Constants {
         public static final double kP = 0.10;
         public static final double kI = 0.0;
         public static final double kD = 0.0000;
-        public static final double MAX_VELOCITY= 20.0;
+        public static final double MAX_VELOCITY= 35.0;//20.0;
         public static final double MAX_ACCELERATION= 15.0;
         public static final double GRAVITY_FEED_FORWARD_VOLTAGE = 1.15;//This is the voltage needed to keep the arm static (not moving) at 0 degrees
         public static final double MAX_ANGLE_Q1_DEGREES = 51;
