@@ -61,7 +61,8 @@ public class BlinkinLEDSubsystem extends SubsystemBase {
   }
 
   public void mat_yellow(){
-    blinkin.set(0.69);
+    //blinkin.set(0.65);//0.69 Orange looks more like MAT. Weird.
+    blinkin.set(0.65);
   }
 
   public void mset_red(){
@@ -73,7 +74,8 @@ public class BlinkinLEDSubsystem extends SubsystemBase {
   }
 
   public void ace_orange(){
-    blinkin.set(0.65);
+   // blinkin.set(0.49); //0.65
+   blinkin.set(0.63);
   }
 
   public void white(){
