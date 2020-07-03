@@ -40,9 +40,18 @@ public class RotateTurret extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    turretGearPIDSubsystem.disable();
+    /*
     if(interrupted)
+    {
+      turretGearPIDSubsystem.disable();
       turretGearPIDSubsystem.setGoal(turretGearPIDSubsystem.getAngleDegrees());//stop at last position
+      turretGearPIDSubsystem.enable();
+    }
+    */
+
   }
+     
 
   // Returns true when the command should end.
   @Override

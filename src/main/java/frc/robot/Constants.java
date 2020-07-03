@@ -29,8 +29,8 @@ public final class Constants {
     }
 
     public static final class DiplomaArmSubsystemConstants {
-        public static final int DIPLOMA_ARM_CAN_ID=5;//TODO arbituary need to find out
-        public static final double GEAR_RATIO=1/76.5287;//TODO find this
+        public static final int DIPLOMA_ARM_CAN_ID=5;
+        public static final double GEAR_RATIO=1/76.5287;
         public static final double ARM_WEIGHT_N=0.0;
         public static final double COM_DISTANCE_m=0.0; //COM=Center of Mass
         public static final int NUMBER_OF_MOTORS=0;

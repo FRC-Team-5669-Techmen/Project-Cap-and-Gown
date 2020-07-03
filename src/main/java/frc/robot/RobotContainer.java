@@ -17,7 +17,6 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DiplomaArmSubsystemConstants;
 import frc.robot.Constants.MoveDiplomaArmConstants;
 import frc.robot.Constants.RotateTurretGearConstants;
-import frc.robot.Constants.TurretGearPIDSubsystemConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualMecanumDrive;
 import frc.robot.commands.MoveDiplomaArm;
@@ -27,9 +26,7 @@ import frc.robot.subsystems.DiplomaArmProfiledPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.MecanumDriveSubsystem;
 import frc.robot.subsystems.TurretGearPIDSubsystem;
-import frc.robot.subsystems.TurretRotatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -71,13 +68,13 @@ public class RobotContainer {
   
   private InstantCommand displayWhite = new InstantCommand(blinkinLEDSubsystem::white, blinkinLEDSubsystem);
 
-  private Command deliverDiplomaToStudent = new SequentialCommandGroup(new MoveDiplomaArm(47.00, profiledPIDDiplomaArm),
+  private Command deliverDiplomaToStudent = new SequentialCommandGroup(new MoveDiplomaArm(47.00, profiledPIDDiplomaArm),  //DANGEROUS library bug PID and Parallel,Sequential Commands.. Don't bother unless you know what you are doing https://www.chiefdelphi.com/t/commandgroup-wont-run-sequentially/163147
   new WaitCommand(10),
   new RotateTurret(RotateTurretGearConstants.STUDENT_POSITION_DEGREES, turretGearPIDSubsystem),
   new WaitCommand(10), 
   new MoveDiplomaArm(MoveDiplomaArmConstants.STUDENT_POSITION_DEGREES, profiledPIDDiplomaArm));
 
-  private Command deliverDiplomaToPresident = new SequentialCommandGroup(new MoveDiplomaArm(47.00, profiledPIDDiplomaArm), //DANGEROUS library bug. Don't bother unless you know what you are doing https://www.chiefdelphi.com/t/commandgroup-wont-run-sequentially/163147
+  private Command deliverDiplomaToPresident = new SequentialCommandGroup(new MoveDiplomaArm(47.00, profiledPIDDiplomaArm), //DANGEROUS library bug with PID and Parallel,Sequential Commands. Don't bother unless you know what you are doing https://www.chiefdelphi.com/t/commandgroup-wont-run-sequentially/163147
 
   new WaitCommand(10),
   new RotateTurret(RotateTurretGearConstants.PRESDIENT_POSITION_DEGREES, turretGearPIDSubsystem), 

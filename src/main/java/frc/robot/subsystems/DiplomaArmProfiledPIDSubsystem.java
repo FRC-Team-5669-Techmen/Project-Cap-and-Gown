@@ -50,14 +50,7 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   @Override
   public void useOutput(double output, TrapezoidProfile.State setpoint) {
     // Use the output (and optionally the setpoint) here
-    if(getAngleFromHorizontalDegrees()>=85.00 && getAngleFromHorizontalDegrees()<=95.00)
-        diplomaArmMotor.setVoltage(output + 2.00*feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0))/*feedForwardVolts(setpoint)*/);
-
-    else if(getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES && getAngleFromHorizontalDegrees()<=DiplomaArmSubsystemConstants.MIN_ANGLE_Q2_DEGREES)
-        diplomaArmMotor.setVoltage(output + 1.75*feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0))/*feedForwardVolts(setpoint)*/);
-    
-    else
-      diplomaArmMotor.setVoltage(output + feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0))/*feedForwardVolts(setpoint)*/);
+    diplomaArmMotor.setVoltage(output+feedForwardVolts(setpoint));//output of PID + feedforward
   }
 
   @Override
@@ -91,7 +84,15 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
    */
 
   public double feedForwardVolts(TrapezoidProfile.State setpoint) { // not using help class yet. too complicated
-    return DiplomaArmSubsystemConstants.GRAVITY_FEED_FORWARD_VOLTAGE * Math.cos(Math.toRadians(setpoint.position));
+    double theoreticalFeedForward = DiplomaArmSubsystemConstants.GRAVITY_FEED_FORWARD_VOLTAGE * Math.cos(Math.toRadians(setpoint.position));
+    if(getAngleFromHorizontalDegrees()>=85.00 && getAngleFromHorizontalDegrees()<=95.00)
+        return 2.00*theoreticalFeedForward;
+
+    else if(getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES && getAngleFromHorizontalDegrees()<=DiplomaArmSubsystemConstants.MIN_ANGLE_Q2_DEGREES)
+        return 1.75*theoreticalFeedForward;
+    
+    else
+      return theoreticalFeedForward;
   }
 
   private void configDiplomaArmMotor() {
@@ -135,20 +136,10 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   public void moveForward() {
     if(getAngleFromHorizontalDegrees()<=51 && getAngleFromHorizontalDegrees()>=32)
     {
-      disable();//allow the user to move the arm by tuning off pid correction
-      /*
-      if (getAngleFromHorizontalDegrees()>74 && getAngleFromHorizontalDegrees()<90)
-        diplomaArmMotor.setVoltage(1.7); //cosine too weak in this region
-      else if (getAngleFromHorizontalDegrees()>DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES && getAngleFromHorizontalDegrees()<DiplomaArmSubsystemConstants.MIN_ANGLE_Q2_DEGREES)
-        diplomaArmMotor.setVoltage(1.8*Math.abs(Math.cos(getAngleFromHorizontalRadians()))+feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));
-      else if (getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MAX_ANGLE_Q2_DEGREES)
-        diplomaArmMotor.setVoltage(0.60+feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));  //0.30
-      else 
-      */
+      disable();
       diplomaArmMotor.setVoltage(1.5*feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));
-      
       setGoal(getAngleFromHorizontalDegrees());
-      enable();//turn the control back on
+      //enable();//No longer need to do this to enable feedforward. Feedforward always on for this system
     }
     else 
       new PrintCommand("Angular Arm Limits Reached");
@@ -162,19 +153,9 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     if(getAngleFromHorizontalDegrees()>=DiplomaArmSubsystemConstants.MIN_ANGLE_Q1_DEGREES+2 && getAngleFromHorizontalDegrees()<=90)
     {
       disable();//allow the user to move the arm by tuning off pid correction
-      /**
-      if (getAngleFromHorizontalDegrees()<DiplomaArmSubsystemConstants.MIN_ANGLE_Q2_DEGREES && getAngleFromHorizontalDegrees()>DiplomaArmSubsystemConstants.MAX_ANGLE_Q1_DEGREES)
-        diplomaArmMotor.setVoltage(-1.8*Math.abs(Math.cos(getAngleFromHorizontalRadians()))+feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));
-        */
-
-     diplomaArmMotor.setVoltage(-0.60+feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));  //0.30
-
-      /*
-      else 
-        diplomaArmMotor.setVoltage(1.5*feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));
-        */
-      setGoal(getAngleFromHorizontalDegrees());
-      enable();//turn the control back on
+      diplomaArmMotor.setVoltage(-0.60+feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));  //0.30
+      setGoal(getAngleFromHorizontalDegrees()); //also be sure to write in the current location as the goal
+      //enable();//No longer need to do this to enable feedforward. Feedforward always on for this system
     }
     else 
      new PrintCommand("Angular Arm Limits Reached");
@@ -186,12 +167,8 @@ public class DiplomaArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   public void periodic() {
     // TODO Auto-generated method stub
     super.periodic();
-   // diplomaArmMotor.setVoltage(feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));
-
+    if(!isEnabled()) //when disabled, don't forget to keep the feedforward on
+          diplomaArmMotor.setVoltage(feedForwardVolts(new TrapezoidProfile.State(getAngleFromHorizontalDegrees(), 0)));
   }
 
-  
-  
-
-  
 }
